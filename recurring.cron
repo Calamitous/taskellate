@@ -1,0 +1,25 @@
+# Repeater|Days of week/month|Column|Position (Top+ Bottom+ #)|Title|Desc|Subtask+Subtask...
+
+Weekly|MO|TODAY|Top|♼ Check ADP for tasks and update dashboard PTO||
+Weekly|MO|TODAY|Top|♼ Set up Weekly Trello Review Spreadsheet||
+
+Weekly|MO+TU+WE+TH+FR|TODAY|Top|♼ Set up standup notes||
+Weekly|MO+TU+WE+TH+FR|TODAY|Top|♼ Check for backlog of RfCR tickets||
+Weekly|MO+TU+WE+TH+FR|TODAY|Top|♼🟦 Personal todo||
+
+Weekly|MO+TU+WE+TH+FR|TODAY|Top|♼ Look for new RfD/RfDA tickets||
+Weekly|MO+TU+WE+TH+FR|TODAY|Top|♼ Digitize notes||
+Weekly|MO+TU+WE+TH+FR|TODAY|Top|♼ Find and review 1 PR||
+
+Weekly|MO+WE+FR|TODAY|Top|♼ Tidy office||
+Weekly|TU+TH|TODAY|Top|♼ Read 1 corpdoc/chapter||
+
+Weekly|MO+TU+WE+TH+FR|TODAY|Bottom|♼ IBZ||
+Weekly|MO+TU+WE+TH+FR|TODAY|Bottom|♼ TZ||
+Weekly|MO+TU+WE+TH|TODAY|Bottom|♼ Set up TODAY for tomorrow||
+
+Weekly|FR|TODAY|Top|♼ Review n/w graph||
+Weekly|FR|TODAY|Top|♼ Set up meeting notes for next week||
+Weekly|FR|TODAY|Top|♼ Backlog review||
+Weekly|FR|TODAY|Bottom|♼ Complete weekly Overview report|Spread: +Jira: +Report: |Run column count: ./column_count.rb+Add Done to spreadsheet+Add WND to spreadsheet+Add Jira story count to spreadsheet+Run task report: ./completed_task_list.rb+Add task list to report+Review WND for misses+Archive WND & Done
+
