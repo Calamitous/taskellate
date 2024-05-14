@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require './taskell_file.rb'
+require './bin/taskell_file.rb'
 
 VERBOSE = false
 

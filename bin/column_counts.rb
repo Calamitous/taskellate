@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require './taskell_file.rb'
-require './taskell_recur.rb'
+require './bin/taskell_file.rb'
+require './bin/taskell_recur.rb'
 
 VERBOSE = false
 

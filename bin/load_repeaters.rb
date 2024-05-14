@@ -2,8 +2,8 @@
 
 # Important: This assumes that hashes maintain entry order
 
-require './taskell_file.rb'
-require './taskell_recur.rb'
+require './bin/taskell_file.rb'
+require './bin/taskell_recur.rb'
 
 VERBOSE = false
 
