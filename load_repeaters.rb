@@ -18,7 +18,6 @@ cron = TaskellRecur.parse_cron_file_data(cron_filename)
 cron.todays_entries_to_add.each do |entry|
   p entry.title if VERBOSE
   # TODO: Handle putting entries in specified numeric areas
-  # TODO: Change list of tasks from hash to array
 
   taskell_file.add_entry_from_cron(entry)
 end

@@ -1,5 +1,20 @@
 require 'securerandom'
 
+# TODO: Change list of tasks from hash to array
+# TODO: Decompose data into classes, maybe
+#
+# Data structure:
+# {
+#   column_1: [ # Duplicate column names are not allowed
+#     "Task 1",
+#     "Task 2",
+#     "Task 2", # Duplicate task names are OK
+#   ],
+#   column_2: [
+#     "Task 3",
+#     "Task 4",
+#   ],
+# }
 class TaskellFile
   attr_reader :data, :filename
 
@@ -7,7 +22,8 @@ class TaskellFile
     @filename = filename
     @data = {}
     @current_column = ''
-    @current_task = nil
+    @current_task_index = -1
+    @current_task_text = ''
     self.read_file(@filename)
   end
 
@@ -44,33 +60,52 @@ class TaskellFile
     puts "Parsing .md file..."
 
     raw_md_file.each_line do |line|
-      if line.empty? || /^\n$/.match?(line)
+      # Skip empty lines
+      if line.chomp.empty?
         puts "Skipping empty..." if VERBOSE
         next
       end
 
+      # Process column header
       if line =~ /^## /
         @current_column = line
+        @current_task_index = -1
+        @current_task_text = ''
         puts "Parsing column #{@current_column.chomp}..." if VERBOSE
-        @data[@current_column] = {}
+        @data[@current_column] = []
         next
       end
 
+      # Process task
       if line =~ /^- /
-        @current_task = line
-        puts "Parsing task #{@current_column.chomp} -> #{@current_task.chomp}..." if VERBOSE
-        @data[@current_column][@current_task] = @current_task.dup
+        @current_task_index += 1
+        @current_task_text = line.dup
+        @data[@current_column][@current_task_index] = @current_task_text
+        puts "Parsing task #{@current_column.chomp} -> #{@data[@current_column][@current_task_index]}..." if VERBOSE
         next
       end
+
+      # Process more task text
+      if line =~ /^    /
+        @current_task_text << line.dup
+        @data[@current_column][@current_task_index] = @current_task_text
+        puts "Parsing task #{@current_column.chomp} -> #{@data[@current_column][@current_task_index]}..." if VERBOSE
+        next
+      end
+
+      # TODO: Add processing smarts as needed for descriptions & checklists
 
       if VERBOSE
         p "Current Column: '#{@current_column}'"
-        p "Current Task: '#{@current_task}'"
-        p "Col => Task Nil?: '#{@data[@current_column][@current_task].nil?}'"
-        p "Col => Task: '#{@data[@current_column][@current_task]}'"
+        p "Current Task Index: '#{@current_task_index}'"
+        p "Current Task Text: '#{@current_task_text}'"
+        p "Col => Task Nil?: '#{@data[@current_column][@current_task_index].nil?}'"
+        p "Col => Task Empty?: '#{@data[@current_column][@current_task_index].empty?}'"
+        p "Col => Task: '#{@data[@current_column][@current_task_index]}'"
         pp @data
       end
-      @data[@current_column][@current_task] << line
+
+      @data[@current_column] << line
     end
 
     @data
@@ -80,30 +115,29 @@ class TaskellFile
     col_key = "## #{entry.column}\n"
 
     if entry.to_top?
-      @data[col_key] = Hash[@data[col_key].to_a.unshift([SecureRandom.uuid, entry.to_md])]
+      puts entry.to_md if VERBOSE
+      @data[col_key] = @data[col_key].unshift(entry.to_md)
     end
 
     if entry.to_bottom?
-      @data[col_key] = Hash[@data[col_key].to_a.push([SecureRandom.uuid, entry.to_md])]
+      puts entry.to_md if VERBOSE
+      @data[col_key] << entry.to_md
     end
   end
 
-  def write_file()
-    File.open(@filename, 'w') do |file|
+  def write_file(outfile = @filename)
+    File.open(outfile, 'w') do |file|
       @data.keys.each do |column_key|
         file.puts column_key
         file.puts
-        @data[column_key].keys.each do |task_key|
-          file.puts @data[column_key][task_key]
+        @data[column_key].each do |task|
+          file.puts task
         end
         file.puts
       end
     end
 
     # Delete empty last line
-    `sed -i '$ d' #{filename}`
+    `sed -i '$ d' #{outfile}`
   end
-
 end
-
-
