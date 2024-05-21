@@ -51,8 +51,8 @@ class TaskellFile
 
   def completed_tasks
     @data["## Done\n"]
-      .select{ |entry| entry !~ /♼/ }
-      .map(&:first)
+      .select { |entry| entry !~ /♼/ }
+      .map { |entry| entry.split("\n").first }
       .map { |entry| entry.gsub(/\n/, '') }
   end
 
@@ -123,6 +123,26 @@ class TaskellFile
       puts entry.to_md if VERBOSE
       @data[col_key] << entry.to_md
     end
+  end
+
+  def remove_wnd_entries
+    if @data["## WND/Incomplete\n"].empty?
+      puts "No WND/Incomplete items found, skipping..."
+    end
+
+    puts "#{@data["## WND/Incomplete\n"].size} WND/Incomplete items found, deleting..."
+
+    @data["## WND/Incomplete\n"] = []
+  end
+
+  def remove_done_entries
+    if @data["## Done\n"].empty?
+      puts "No 'Done' items found, skipping..."
+    end
+
+    puts "#{@data["## Done\n"].size} 'Done' items found, deleting..."
+
+    @data["## Done\n"] = []
   end
 
   def write_file(outfile = @filename)

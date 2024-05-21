@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-# Important: This assumes that hashes maintain entry order
-
 require './bin/taskell_file.rb'
 require './bin/taskell_recur.rb'
 
