@@ -22,3 +22,6 @@ end
 
 puts "Writing data file..."
 taskell_file.write_file
+
+puts "Restarting taskell..."
+`killall taskell`
