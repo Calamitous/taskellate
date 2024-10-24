@@ -57,7 +57,7 @@ class TaskellFile
   end
 
   def parse_file(raw_md_file)
-    puts "Parsing .md file..."
+    # puts "Parsing .md file..."
 
     raw_md_file.each_line do |line|
       # Skip empty lines
