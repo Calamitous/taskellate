@@ -40,13 +40,28 @@ class TaskellFile
     @data.keys.map { |c| c.gsub(/^## /, '').chomp }
   end
 
-  def column_counts
+  def generate_column_count_hash
     counts = {}
     raw_columns.each do |raw_column|
-      counts[raw_column] = @data[raw_column].length
+      clean_column_name = raw_column.gsub(/^## /, '').chomp
+      counts[clean_column_name] = @data[raw_column].length
     end
 
-    counts.map{ |k, v| "#{k.gsub(/^## /, '').chomp}: #{v}" }
+    counts
+  end
+
+  def column_counts
+    counts = generate_column_count_hash
+    counts.map{ |k, v| "#{k}: #{v}" }
+  end
+
+  def working_counts
+    counts = generate_column_count_hash
+    counts['Backlog'] +
+      counts['This Week'] +
+      counts['TODAY'] +
+      counts['In Progress'] +
+      counts['Blocked/Waiting']
   end
 
   def completed_tasks

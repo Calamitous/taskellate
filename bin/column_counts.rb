@@ -18,7 +18,9 @@ puts 'Column Counts:'
 puts '--------------'
 taskell_file.column_counts.each { |cc| puts cc }
 puts '--------------'
-puts `taskell -i taskell.md`
+puts "Working Task Counts: #{taskell_file.working_counts}"
 puts '--------------'
 puts "Recurring Tasks: #{cron.weekly_count}"
+puts '--------------'
+puts `taskell -i taskell.md`
 puts '--------------'
