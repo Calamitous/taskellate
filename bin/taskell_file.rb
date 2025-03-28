@@ -141,13 +141,13 @@ class TaskellFile
   end
 
   def remove_wnd_entries
-    if @data["## WND/Incomplete\n"].empty?
-      puts "No WND/Incomplete items found, skipping..."
+    if @data["## WND\n"].empty?
+      puts "No WND items found, skipping..."
     end
 
-    puts "#{@data["## WND/Incomplete\n"].size} WND/Incomplete items found, deleting..."
+    puts "#{@data["## WND\n"].size} WND items found, deleting..."
 
-    @data["## WND/Incomplete\n"] = []
+    @data["## WND\n"] = []
   end
 
   def remove_done_entries

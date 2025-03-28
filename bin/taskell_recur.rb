@@ -20,7 +20,7 @@ class TaskellRecur
   end
 
   def todays_entries_to_add
-    @entries.filter(&:valid_today?)
+    @entries.select(&:valid_today?)
   end
 
   def self.parse_cron_file_data(filename)
