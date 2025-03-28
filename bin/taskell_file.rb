@@ -24,6 +24,7 @@ class TaskellFile
     @current_column = ''
     @current_task_index = -1
     @current_task_text = ''
+    @all_tasks = []
     self.read_file(@filename)
   end
 
@@ -64,6 +65,10 @@ class TaskellFile
       counts['Blocked/Waiting']
   end
 
+  def untagged
+    @all_tasks.select { |entry| entry !~ /#\w*/ && entry !~ /===/}
+  end
+
   def completed_tasks
     @data["## Done\n"]
       .select { |entry| entry !~ /♼/ }
@@ -96,6 +101,7 @@ class TaskellFile
         @current_task_index += 1
         @current_task_text = line.dup
         @data[@current_column][@current_task_index] = @current_task_text
+        @all_tasks << "#{line.chomp} \e[1;32m(#{@current_column.chomp.gsub(/^## /, '')})\e[0m"
         puts "Parsing task #{@current_column.chomp} -> #{@data[@current_column][@current_task_index]}..." if VERBOSE
         next
       end
