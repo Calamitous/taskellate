@@ -69,9 +69,32 @@ class TaskellFile
     @all_tasks.select { |entry| entry !~ /#\w*/ && entry !~ /===/}
   end
 
+  def completed_tag_distribution
+    result = Hash.new(0)
+
+    all_completed_tasks
+      .map { |task| parse_tags(task) }
+      .flatten
+      .each { |tag| result[tag] += 1}
+
+    result
+  end
+
+  def parse_tags(task)
+    task
+      .split(' ')
+      .select { |word| word =~ /^#[^#]/ }
+  end
+
   def completed_tasks
     @data["## Done\n"]
       .select { |entry| entry !~ /♼/ }
+      .map { |entry| entry.split("\n").first }
+      .map { |entry| entry.gsub(/\n/, '') }
+  end
+
+  def all_completed_tasks
+    @data["## Done\n"]
       .map { |entry| entry.split("\n").first }
       .map { |entry| entry.gsub(/\n/, '') }
   end
@@ -81,10 +104,7 @@ class TaskellFile
 
     raw_md_file.each_line do |line|
       # Skip empty lines
-      if line.chomp.empty?
-        puts "Skipping empty..." if VERBOSE
-        next
-      end
+      next if line.chomp.empty?
 
       # Process column header
       if line =~ /^## /
@@ -119,18 +139,19 @@ class TaskellFile
     @data
   end
 
-  def add_entry_from_cron(entry)
+  def add_entry(entry)
     col_key = "## #{entry.column}\n"
+    @data[col_key] << entry.to_md
+  end
 
-    if entry.to_top?
-      puts entry.to_md if VERBOSE
-      @data[col_key] = @data[col_key].unshift(entry.to_md)
-    end
+  def insert_entry(entry)
+    col_key = "## #{entry.column}\n"
+    @data[col_key] = @data[col_key].unshift(entry.to_md)
+  end
 
-    if entry.to_bottom?
-      puts entry.to_md if VERBOSE
-      @data[col_key] << entry.to_md
-    end
+  def add_entry_from_cron(cron_entry)
+    insert_entry(cron_entry.to_entry) if cron_entry.to_top?
+    add_entry(cron_entry.to_entry) if cron_entry.to_bottom?
   end
 
   def remove_wnd_entries

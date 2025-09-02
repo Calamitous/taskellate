@@ -1,4 +1,6 @@
 require 'date'
+require './bin/taskell_recur.rb'
+require './bin/taskell_entry.rb'
 
 class NilClass
   def blank?
@@ -65,6 +67,10 @@ class TaskellRecurEntry
     @subtasks = subtasks
   end
 
+  def to_entry
+    TaskellEntry.new(column, title, description, subtasks)
+  end
+
   def valid_today?
     today = Date.today
 
@@ -77,13 +83,6 @@ class TaskellRecurEntry
 
   def to_bottom?
     position == 'Bottom'
-  end
-
-  def to_md
-    return ["- #{@title}", description_to_md, subtasks_to_md].join("\n") unless @description.blank? || subtasks.empty?
-    return ["- #{@title}", description_to_md].join("\n") unless @description.blank?
-    return ["- #{@title}", subtasks_to_md].join("\n") unless subtasks.empty?
-    "- #{@title}"
   end
 
   def self.parse_cron_entry(line)
@@ -107,20 +106,6 @@ class TaskellRecurEntry
 
     subtasks = (subtasks || '').chomp.split('+')
 
-    # p repeater, days, column, position, title, description, subtasks
-
     self.new(repeater, days, column, position, title, description, subtasks)
   end
-
-  private
-
-  def description_to_md
-    @description.split('+').map { |ds| "    > #{ds}" }
-  end
-
-  def subtasks_to_md
-    @subtasks.map { |st| "    * [ ] #{st}" }.join("\n")
-  end
 end
-
-
