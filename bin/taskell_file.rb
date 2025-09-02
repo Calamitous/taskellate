@@ -91,7 +91,6 @@ class TaskellFile
         @current_column = line
         @current_task_index = -1
         @current_task_text = ''
-        puts "Parsing column #{@current_column.chomp}..." if VERBOSE
         @data[@current_column] = []
         next
       end
@@ -102,7 +101,6 @@ class TaskellFile
         @current_task_text = line.dup
         @data[@current_column][@current_task_index] = @current_task_text
         @all_tasks << "#{line.chomp} \e[1;32m(#{@current_column.chomp.gsub(/^## /, '')})\e[0m"
-        puts "Parsing task #{@current_column.chomp} -> #{@data[@current_column][@current_task_index]}..." if VERBOSE
         next
       end
 
@@ -110,21 +108,10 @@ class TaskellFile
       if line =~ /^    /
         @current_task_text << line.dup
         @data[@current_column][@current_task_index] = @current_task_text
-        puts "Parsing task #{@current_column.chomp} -> #{@data[@current_column][@current_task_index]}..." if VERBOSE
         next
       end
 
-      # TODO: Add processing smarts as needed for descriptions & checklists
-
-      if VERBOSE
-        p "Current Column: '#{@current_column}'"
-        p "Current Task Index: '#{@current_task_index}'"
-        p "Current Task Text: '#{@current_task_text}'"
-        p "Col => Task Nil?: '#{@data[@current_column][@current_task_index].nil?}'"
-        p "Col => Task Empty?: '#{@data[@current_column][@current_task_index].empty?}'"
-        p "Col => Task: '#{@data[@current_column][@current_task_index]}'"
-        pp @data
-      end
+      # TODO:Add processing smarts as needed for descriptions & checklists
 
       @data[@current_column] << line
     end

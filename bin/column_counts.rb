@@ -3,8 +3,6 @@
 require './bin/taskell_file.rb'
 require './bin/taskell_recur.rb'
 
-VERBOSE = false
-
 md_filename = ARGV[0] || './taskell.md'
 # puts "Loading .md file: #{md_filename}..."
 taskell_file = TaskellFile.new(md_filename)

@@ -3,8 +3,6 @@
 require './bin/taskell_file.rb'
 require './bin/taskell_recur.rb'
 
-VERBOSE = false
-
 md_filename = ARGV[0] || './taskell.md'
 puts "Loading .md file: #{md_filename}..."
 taskell_file = TaskellFile.new(md_filename)
@@ -14,7 +12,6 @@ puts "Loading .cron file: #{cron_filename}..."
 cron = TaskellRecur.parse_cron_file_data(cron_filename)
 
 cron.todays_entries_to_add.each do |entry|
-  p entry.title if VERBOSE
   # TODO: Handle putting entries in specified numeric areas
 
   taskell_file.add_entry_from_cron(entry)
